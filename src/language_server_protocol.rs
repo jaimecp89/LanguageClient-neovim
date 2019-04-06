@@ -2179,7 +2179,7 @@ impl LanguageClient {
 
     pub fn languageClient_handleCursorMoved(&self, params: &Value) -> Fallible<()> {
         info!("Begin {}", NOTIFICATION__HandleCursorMoved);
-        let filename = self.vim()?.get_filename(params)?;
+        let filename = self.vim()?.get_filename(params)?.canonicalize().replace("\\\\", "\\\\\\\\");
         let languageId = self.vim()?.get_languageId(&filename, params)?;
         let line = self.vim()?.get_position(params)?.line;
         if !self.get(|state| state.serverCommands.contains_key(&languageId))? {
